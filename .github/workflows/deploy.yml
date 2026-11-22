@@ -19,6 +19,7 @@ jobs:
             cd /root/apartmani-prgic-be
             git fetch origin master
             git reset --hard origin/master
+            kubectl apply -f k8s/deploy.yaml
             SHA=$(git rev-parse --short HEAD)
             docker build -t apartmani-prgic-be:$SHA .
             docker save apartmani-prgic-be:$SHA | sudo k3s ctr images import -
