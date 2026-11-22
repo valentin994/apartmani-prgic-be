@@ -1,0 +1,26 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.HETZNER_HOST }}
+          username: ${{ secrets.HETZNER_USER }}
+          key: ${{ secrets.HETZNER_SSH_KEY }}
+          script: |
+            set -e
+            cd /root/prgic-backend
+            git fetch origin main
+            git reset --hard origin/main
+            SHA=$(git rev-parse --short HEAD)
+            docker build -t prgic-backend:$SHA .
+            docker save prgic-backend:$SHA | sudo k3s ctr images import -
+            kubectl set image deployment/prgic-backend prgic-backend=prgic-backend:$SHA -n prgic-backend
+            kubectl rollout status deployment/prgic-backend -n prgic-backend --timeout=120s
