@@ -3,6 +3,7 @@ use prgic_backend::state::AppState;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    dotenvy::dotenv().ok();
     tracing_subscriber::fmt::init();
     let database_url = std::env::var("DATABASE_URL").unwrap_or_else(|_| "sqlite.db".to_string());
     let state = AppState::new(&database_url).await?;
