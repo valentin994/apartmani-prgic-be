@@ -17,8 +17,8 @@ jobs:
           script: |
             set -e
             cd /root/apartmani-prgic-be
-            git fetch origin main
-            git reset --hard origin/main
+            git fetch origin master
+            git reset --hard origin/master
             SHA=$(git rev-parse --short HEAD)
             docker build -t prgic-backend:$SHA .
             docker save prgic-backend:$SHA | sudo k3s ctr images import -
