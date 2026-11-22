@@ -23,4 +23,4 @@ jobs:
             docker build -t prgic-backend:$SHA .
             docker save prgic-backend:$SHA | sudo k3s ctr images import -
             kubectl set image deployment/prgic-backend prgic-backend=prgic-backend:$SHA -n prgic-backend
-            kubectl rollout status deployment/prgic-backend -n prgic-backend --timeout=120s
+            kubectl rollout status deployment/prgic-backend -n apartmani-prgic-be --timeout=120s
