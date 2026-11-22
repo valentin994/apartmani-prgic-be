@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: prgic-backend
+  name: apartmani-prgic-be
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: prgic-backend-data
-  namespace: prgic-backend
+  name: apartmani-prgic-be-data
+  namespace: apartmani-prgic-be
 spec:
   accessModes:
     - ReadWriteOnce
@@ -18,23 +18,23 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: prgic-backend
-  namespace: prgic-backend
+  name: apartmani-prgic-be
+  namespace: apartmani-prgic-be
 spec:
   replicas: 1
   strategy:
     type: Recreate
   selector:
     matchLabels:
-      app: prgic-backend
+      app: apartmani-prgic-be
   template:
     metadata:
       labels:
-        app: prgic-backend
+        app: apartmani-prgic-be
     spec:
       containers:
-        - name: prgic-backend
-          image: prgic-backend:latest
+        - name: apartmani-prgic-be
+          image: apartmani-prgic-be:latest
           imagePullPolicy: Never
           ports:
             - containerPort: 3000
@@ -47,16 +47,16 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: prgic-backend-data
+            claimName: apartmani-prgic-be-data
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: prgic-backend
-  namespace: prgic-backend
+  name: apartmani-prgic-be
+  namespace: apartmani-prgic-be
 spec:
   selector:
-    app: prgic-backend
+    app: apartmani-prgic-be
   ports:
     - port: 3000
       targetPort: 3000
@@ -64,8 +64,8 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: prgic-backend-ingress
-  namespace: prgic-backend
+  name: apartmani-prgic-be-ingress
+  namespace: apartmani-prgic-be
   annotations:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
     traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
@@ -78,10 +78,10 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: prgic-backend
+                name: apartmani-prgic-be
                 port:
                   number: 3000
   tls:
     - hosts:
         - api.apartmani-prgic.hr
-      secretName: prgic-backend-tls
+      secretName: apartmani-prgic-be-tls
