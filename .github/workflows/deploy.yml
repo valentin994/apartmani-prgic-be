@@ -16,7 +16,7 @@ jobs:
           key: ${{ secrets.HETZNER_SSH_KEY }}
           script: |
             set -e
-            cd /root/prgic-backend
+            cd /root/apartmeni-prgic-be
             git fetch origin main
             git reset --hard origin/main
             SHA=$(git rev-parse --short HEAD)
