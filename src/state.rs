@@ -15,6 +15,7 @@ impl AppState {
         let options = SqliteConnectOptions::new()
             .filename(database_url)
             .create_if_missing(true)
+            .foreign_keys(true)
             .journal_mode(sqlx::sqlite::SqliteJournalMode::Wal);
 
         let db = SqlitePoolOptions::new()

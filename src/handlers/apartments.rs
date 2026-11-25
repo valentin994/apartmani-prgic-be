@@ -1,4 +1,5 @@
 use crate::{
+    auth::RequireAdmin,
     dto::apartments::{Apartment, UpdateApartment},
     error::ApiError,
     state::AppState,
@@ -19,6 +20,7 @@ pub async fn list_apartments(
 }
 
 pub async fn update_apartment_price(
+    _require_admin: RequireAdmin,
     State(state): State<AppState>,
     Path(id): Path<u16>,
     Json(apartment): Json<UpdateApartment>,

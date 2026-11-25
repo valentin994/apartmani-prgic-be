@@ -12,6 +12,9 @@ pub enum ApiError {
     #[error("Unauthorized")]
     Unauthorized,
 
+    #[error("BadRequest: {0}")]
+    BadRequest(String),
+
     #[error("Session error: {0}")]
     Session(#[from] tower_sessions::session::Error),
 }
@@ -24,6 +27,7 @@ impl IntoResponse for ApiError {
                 StatusCode::UNAUTHORIZED,
                 "Unauthorized for this action".to_string(),
             ),
+            ApiError::BadRequest(e) => (StatusCode::BAD_REQUEST, e),
             ApiError::Session(e) => (StatusCode::INTERNAL_SERVER_ERROR, e.to_string()),
         };
         response.into_response()
